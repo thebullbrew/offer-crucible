@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Offer Crucible — Test Every Offer in the Fire</title>
+<meta name="description" content="For sellers and listing agents: rank competing offers by risk-adjusted value, not headline price. Certainty, carrying cost, rent-back and fall-through risk — all in one crucible.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-32.png">
+<meta name="theme-color" content="#0B120C">
+<style>
+:root{--bg:#0B120C;--surface:#122016;--surface2:#0F1B12;--text:#EFF3E8;--muted:#B9C4B2;--verd:#4A9A8A;--verd2:#6FBFA9;--gold:#B49A5B;--gold2:#D8BE7E;--line:#2A4636;--bad:#D98A7A;--radius:10px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Georgia,'Times New Roman',serif;line-height:1.5}
+a{color:var(--verd2)}button,input,select{font:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 64px}
+.eyebrow{letter-spacing:.22em;text-transform:uppercase;color:var(--verd2);font-size:.78rem;text-align:center}
+h1{font-size:clamp(2.2rem,6vw,4rem);line-height:.95;text-align:center;margin:.15em 0;color:var(--text)}h1 em{color:var(--gold2);font-style:italic}
+.sub{text-align:center;color:var(--muted);max-width:760px;margin:0 auto 8px;font-size:1.06rem}
+.orn{text-align:center;color:var(--gold);letter-spacing:.5em;margin:10px 0 18px}
+.hero{border:3px double var(--gold);background:linear-gradient(180deg,#14261A,var(--surface));padding:28px 18px 20px;border-radius:6px}
+.formula{text-align:center;font-style:italic;color:var(--gold2);background:#0A140C;border:1px solid var(--line);padding:12px;border-radius:6px;max-width:860px;margin:14px auto 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--surface);border:3px double var(--line);border-radius:6px;padding:16px}
+.card h2,.card h3{margin:.1em 0 .5em;color:var(--gold2)} .card h3{font-size:1.05rem}
+label{display:block;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 4px}
+input,select{width:100%;padding:10px;border-radius:6px;border:1px solid var(--line);background:#0A140C;color:var(--text)}
+input:focus,select:focus{outline:2px solid var(--verd)}
+.btn{background:var(--verd);color:#06110D;border:0;padding:12px 18px;border-radius:6px;font-weight:bold;cursor:pointer}.btn.gold{background:var(--gold);color:#171106}.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.verdict{border:3px double var(--gold);background:linear-gradient(180deg,#173325,#122016);padding:20px;border-radius:6px;text-align:center}
+.verdict .big{font-size:clamp(1.7rem,4vw,2.7rem);color:var(--gold2);line-height:1.1}
+table{width:100%;border-collapse:collapse;font-size:.95rem}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}th{color:var(--verd2);text-transform:uppercase;font-size:.75rem;letter-spacing:.08em}
+.rank1{background:rgba(180,154,91,.12)} .win{color:var(--gold2);font-weight:bold}
+.meter{height:10px;background:#0A140C;border:1px solid var(--line);border-radius:99px;overflow:hidden}.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--verd),var(--gold))}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chip{font-size:.78rem;border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted)}.chip b{color:var(--gold2)}
+.small{font-size:.88rem;color:var(--muted)} .trap{border-left:4px solid var(--bad);background:#1B1512;padding:14px 16px;border-radius:0 6px 6px 0}
+.kpi{font-size:1.9rem;color:var(--gold2);line-height:1}.section{margin-top:26px} .offerhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+footer{color:var(--muted);text-align:center;margin-top:36px;font-size:.9rem}
+@media(max-width:640px){th,td{padding:7px 4px;font-size:.85rem}}
+</style></head><body><div class="wrap">
+<header class="hero">
+<div class="eyebrow">☙ For Sellers &amp; Listing Agents ❧</div>
+<h1>The Offer <em>Crucible</em></h1>
+<p class="sub">The highest price is often the weakest offer wearing a nice suit. Put every bid through the fire — certainty, carrying cost, rent-back, concessions and fall-through risk — and rank them by what they are actually expected to put in your pocket.</p>
+<div class="formula">Risk-Adjusted Value &nbsp;=&nbsp; Net Proceeds × P(close) &nbsp;−&nbsp; (1 − P(close)) × Fall-Through Cost</div>
+<div class="orn">☙ ❧ ☙</div>
+<div class="grid">
+<div><div class="kpi" id="kOffers">4</div><div class="small">offers in the fire</div></div>
+<div><div class="kpi" id="kWinner">—</div><div class="small">crucible winner</div></div>
+<div><div class="kpi" id="kGap">$0</div><div class="small">winner's edge over the highest price</div></div>
+<div><div class="kpi" id="kTrap">—</div><div class="small">is the top price a trap?</div></div>
+</div></header>
+
+<section class="card section"><h2>☙ The Seller's Ledger ❧</h2>
+<div class="grid">
+<div><label>List price ($)</label><input type="number" id="listPrice" value="485000" step="1000"></div>
+<div><label>Monthly carrying cost ($)</label><input type="number" id="carryMo" value="2850" step="50"><div class="small">Mortgage, tax, insurance, upkeep — what waiting costs you.</div></div>
+<div><label>Rent you'd pay elsewhere ($ / day)</label><input type="number" id="altRent" value="85" step="5"><div class="small">Values free rent-back days.</div></div>
+<div><label>Relist price cut if a deal dies (%)</label><input type="number" id="relistCut" value="2" step="0.5"></div>
+</div></section>
+
+<section class="section"><h2 style="color:var(--gold2)">☙ The Offers ❧</h2><div class="grid" id="offers" style="grid-template-columns:repeat(auto-fit,minmax(255px,1fr))"></div></section>
+
+<section class="verdict section"><div class="eyebrow">The Verdict</div><div class="big" id="verdictBig">—</div><p id="verdictText" class="sub" style="margin-top:8px"></p></section>
+
+<section class="card section"><h2>☙ The Assay — Ranked by Risk-Adjusted Value ❧</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Offer</th><th>Price</th><th>Net*</th><th>P(close)</th><th>Risk-Adj. Value</th><th>Verdict</th></tr></thead><tbody id="rankBody"></tbody></table></div>
+<p class="small">*Net = price − concessions − carrying cost to closing + value of free rent-back days. Fall-through cost = 60 extra days of carrying + your relist price cut on the list price. Certainty is a structured estimate, not a promise — use it to compare, not to prophecy.</p>
+<div id="trapBox"></div></section>
+
+<section class="card section"><h2>☙ What If the Fire Cools? ❧</h2><p class="small">Each offer's risk-adjusted value if its chance of closing were only this good. Fragile offers fall fast. Sturdy ones barely move.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Offer</th><th>At 50%</th><th>At 70%</th><th>At 90%</th><th>At its score</th></tr></thead><tbody id="sensBody"></tbody></table></div></section>
+
+<section class="card section"><h2>☙ The Formula, In Plain Speech ❧</h2>
+<div class="grid">
+<div><h3>Cash is certainty</h3><p class="small">Cash removes the lender, the appraisal and most of the ways a deal dies in week three. The Crucible pays it the highest certainty premium — because sellers who have buried a cash-less deal already know why.</p></div>
+<div><h3>Earnest money is a tell</h3><p class="small">A buyer with real money down has something to lose by walking. One percent is a handshake. Five percent is a commitment.</p></div>
+<div><h3>Time is a line item</h3><p class="small">Every extra week to closing is carrying cost out of your pocket. A slower, higher offer can quietly cost more than a faster, lower one earns.</p></div>
+<div><h3>Contingencies are doors</h3><p class="small">Every contingency kept is a door the buyer can walk out of. Waived doors do not make a deal certain — they make escape more expensive.</p></div>
+</div>
+<div class="btnrow"><button class="btn gold" id="copyBtn">Copy summary</button><input id="saveName" placeholder="Name this comparison — e.g. Maple St, round 1" style="flex:1;min-width:200px"><button class="btn" id="saveBtn">Save comparison</button></div>
+<div id="savedList" class="small"></div><p id="copyMsg" class="small"></p></section>
+
+<footer>☙ ❧ ☙<br>The Offer Crucible — a daily finance &amp; real-estate tool. No backend, no tracking, your numbers stay in your browser.</footer>
+</div>
+<script>
+const FIN={Cash:30,Conventional:15,FHA:5,VA:5,Other:8};
+const defaults=[
+ {on:true,label:"Offer A — The High Bid",price:518000,earnest:5000,fin:"Conventional",down:5,gap:0,insp:"Full",finCont:"Kept",days:45,rentback:0,conc:6000},
+ {on:true,label:"Offer B — The Clean Bid",price:505000,earnest:25000,fin:"Cash",down:100,gap:0,insp:"Waived",finCont:"Waived",days:21,rentback:14,conc:0},
+ {on:true,label:"Offer C — The Middle",price:510000,earnest:15000,fin:"Conventional",down:20,gap:15000,insp:"Pass/Fail only",finCont:"Waived",days:30,rentback:7,conc:0},
+ {on:true,label:"Offer D — The Slow Bid",price:498000,earnest:5000,fin:"VA",down:0,gap:5000,insp:"Full",finCont:"Kept",days:60,rentback:0,conc:3000}
+];
+let offers=JSON.parse(localStorage.getItem("crucible-offers")||"null")||defaults;
+const $=id=>document.getElementById(id);
+function money(n){return (n<0?"-$":"$")+Math.abs(Math.round(n)).toLocaleString()}
+function build(){
+ const box=$("offers");box.innerHTML="";
+ offers.forEach((o,i)=>{
+  const d=document.createElement("div");d.className="card";
+  d.innerHTML=`<div class="offerhead"><h3>${o.label.split("—")[0]}</h3><label style="margin:0;text-transform:none"><input type="checkbox" data-k="on" data-i="${i}" ${o.on?"checked":""} style="width:auto"> In the fire</label></div>
+  <label>Label</label><input data-k="label" data-i="${i}" value="${o.label}">
+  <label>Price ($)</label><input type="number" step="1000" data-k="price" data-i="${i}" value="${o.price}">
+  <label>Earnest money ($)</label><input type="number" step="500" data-k="earnest" data-i="${i}" value="${o.earnest}">
+  <label>Financing</label><select data-k="fin" data-i="${i}">${["Cash","Conventional","FHA","VA","Other"].map(f=>`<option ${f===o.fin?"selected":""}>${f}</option>`).join("")}</select>
+  <label>Down payment (%)</label><input type="number" step="1" data-k="down" data-i="${i}" value="${o.down}">
+  <label>Appraisal-gap cash ($)</label><input type="number" step="1000" data-k="gap" data-i="${i}" value="${o.gap}">
+  <label>Inspection contingency</label><select data-k="insp" data-i="${i}">${["Waived","Pass/Fail only","Full"].map(f=>`<option ${f===o.insp?"selected":""}>${f}</option>`).join("")}</select>
+  <label>Financing contingency</label><select data-k="finCont" data-i="${i}">${["Waived","Kept"].map(f=>`<option ${f===o.finCont?"selected":""}>${f}</option>`).join("")}</select>
+  <label>Days to close</label><input type="number" step="1" data-k="days" data-i="${i}" value="${o.days}">
+  <label>Free rent-back days for you</label><input type="number" step="1" data-k="rentback" data-i="${i}" value="${o.rentback}">
+  <label>Concessions asked ($)</label><input type="number" step="500" data-k="conc" data-i="${i}" value="${o.conc}">
+  <div class="chips" id="chips${i}"></div><div style="margin-top:10px"><div class="small">Certainty</div><div class="meter"><i id="meter${i}"></i></div></div>`;
+  box.appendChild(d);
+ });
+ box.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",e=>{const i=+e.target.dataset.i,k=e.target.dataset.k;let v=e.target.type==="checkbox"?e.target.checked:e.target.value;if(e.target.type==="number")v=+v;offers[i][k]=v;localStorage.setItem("crucible-offers",JSON.stringify(offers));calc();}));
+ ["listPrice","carryMo","altRent","relistCut"].forEach(id=>$(id).addEventListener("input",calc));
+}
+function assay(o){
+ const carryDay=+$("carryMo").value/30, alt=+$("altRent").value;
+ const net=o.price-o.conc-carryDay*o.days+alt*o.rentback;
+ let pts=38,why=[];
+ pts+=FIN[o.fin]||5; why.push([o.fin,FIN[o.fin]||5]);
+ const ep=o.price?o.earnest/o.price*100:0; const epts=ep>=5?15:ep>=3?10:ep>=1?5:0; pts+=epts; why.push(["Earnest "+ep.toFixed(1)+"%",epts]);
+ const ipts=o.insp==="Waived"?12:o.insp==="Pass/Fail only"?6:0; pts+=ipts; why.push(["Inspection: "+o.insp,ipts]);
+ const fpts=(o.fin==="Cash"||o.finCont==="Waived")?10:0; pts+=fpts; why.push(["Fin. contingency",fpts]);
+ const gpts=o.fin==="Cash"?10:o.gap>=25000?10:o.gap>=10000?6:o.gap>0?3:0; pts+=gpts; why.push(["Gap cover",gpts]);
+ const dpts=o.down>=20?5:o.down>=10?3:0; pts+=dpts; why.push(["Down "+o.down+"%",dpts]);
+ const tpts=o.days<=30?5:o.days<=45?2:o.days>60?-5:0; pts+=tpts; why.push(["Speed",tpts]);
+ const prob=Math.max(.35,Math.min(.98,pts/100));
+ const fall=carryDay*60 + (+$("listPrice").value*(+$("relistCut").value/100));
+ const ev=net*prob-(1-prob)*fall;
+ return {net,prob,ev,fall,why};
+}
+function calc(){
+ const act=offers.map((o,i)=>({...o,i})).filter(o=>o.on);
+ if(!act.length)return;
+ const rows=act.map(o=>({...o,...assay(o)})).sort((a,b)=>b.ev-a.ev);
+ const winner=rows[0]; const high=[...rows].sort((a,b)=>b.price-a.price)[0];
+ $("kOffers").textContent=act.length; $("kWinner").textContent=winner.label.split("—")[0].trim();
+ $("kGap").textContent=money(winner.ev-high.ev);
+ const trap=high.i!==winner.i; $("kTrap").textContent=trap?"YES — see below":"No";
+ $("verdictBig").textContent=winner.label+" wins the crucible";
+ $("verdictText").textContent=`At ${money(winner.price)} it is not the loudest bid — it is the sturdiest. Net ${money(winner.net)}, a ${Math.round(winner.prob*100)}% certainty score, and a risk-adjusted value of ${money(winner.ev)}.`;
+ $("rankBody").innerHTML=rows.map((r,idx)=>`<tr class="${idx===0?"rank1":""}"><td class="${idx===0?"win":""}">${idx===0?"★ ":""}${r.label}</td><td>${money(r.price)}</td><td>${money(r.net)}</td><td>${Math.round(r.prob*100)}%</td><td><b>${money(r.ev)}</b></td><td>${idx===0?"TAKE IT":r.i===high.i?"Highest, not best":"Beaten"}</td></tr>`).join("");
+ $("sensBody").innerHTML=rows.map(r=>`<tr><td>${r.label}</td>${[.5,.7,.9].map(p=>`<td>${money(r.net*p-(1-p)*r.fall)}</td>`).join("")}<td><b>${money(r.ev)}</b></td></tr>`).join("");
+ $("trapBox").innerHTML=trap?`<div class="trap"><b>The highest-price trap:</b> ${high.label} headlines at ${money(high.price)} — ${money(high.price-winner.price)} above the winner — but its risk-adjusted value is ${money(winner.ev-high.ev)} <i>lower</i>. The gap is not opinion. It is contingencies, time and fall-through risk, priced. Counter the sturdy offer if you want more; do not chase the fragile one for its headline.</div>`:`<div class="trap" style="border-color:var(--verd)"><b>No trap this round:</b> the highest price is also the sturdiest offer. Rare, pleasant, and worth verifying — earnest, proof of funds, and the lender call still matter.</div>`;
+ offers.forEach((o,i)=>{if(!o.on)return;const a=assay(o);const c=$("chips"+i),m=$("meter"+i);if(c)c.innerHTML=a.why.map(w=>`<span class="chip">${w[0]} <b>+${w[1]}</b></span>`).join("");if(m)m.style.width=Math.round(a.prob*100)+"%";});
+ window._rows=rows;
+}
+$("copyBtn").onclick=()=>{const rows=window._rows||[];const txt="THE OFFER CRUCIBLE\n"+rows.map((r,i)=>`${i+1}. ${r.label} — Price ${money(r.price)} | Net ${money(r.net)} | P(close) ${Math.round(r.prob*100)}% | Risk-adjusted ${money(r.ev)}`).join("\n")+"\nWinner: "+(rows[0]?rows[0].label:"—");navigator.clipboard.writeText(txt).then(()=>$("copyMsg").textContent="Copied. Send it to your seller — the ranking usually ends the argument.");};
+$("saveBtn").onclick=()=>{const name=$("saveName").value.trim()||("Comparison "+new Date().toLocaleDateString());const all=JSON.parse(localStorage.getItem("crucible-saved")||"[]");all.push({name,offers,ctx:{listPrice:$("listPrice").value,carryMo:$("carryMo").value,altRent:$("altRent").value,relistCut:$("relistCut").value}});localStorage.setItem("crucible-saved",JSON.stringify(all));renderSaved();};
+function renderSaved(){const all=JSON.parse(localStorage.getItem("crucible-saved")||"[]");$("savedList").innerHTML=all.length?("Saved: "+all.map((s,i)=>`<a href="#" data-load="${i}">${s.name}</a>`).join(" · ")):"No saved comparisons yet.";$("savedList").querySelectorAll("[data-load]").forEach(a=>a.onclick=e=>{e.preventDefault();const s=all[+a.dataset.load];offers=s.offers;Object.keys(s.ctx).forEach(k=>$(k).value=s.ctx[k]);build();calc();});}
+build();calc();renderSaved();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script></body></html>
